@@ -14,11 +14,6 @@ export default {
   components: {
     Searchbar,
   },
-  data() {
-    return {
-      films: [],
-    };
-  },
   methods: {
     sendFilms(e) {
       this.$emit('getFilms', e);

@@ -49,7 +49,10 @@ export default {
       if (this.input.value.length === 0) { this.input.emptyError = true; } else { // ricerca
         if (this.input.emptyError) { this.input.emptyError = false; }
         if (this.searchFilm.length > 0) { this.searchFilm = []; }
-        fullQueryApi += this.input.value;
+
+        // const queryTxt = this.input.value.split(' ').join('+');
+        // console.log('queryTxt:', queryTxt);
+        fullQueryApi += this.input.value.split(' ').join('+');
         // chiamata axios
         axios.get(fullQueryApi)
           .then((r) => {
