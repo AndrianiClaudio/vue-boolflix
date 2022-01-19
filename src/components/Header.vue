@@ -14,9 +14,6 @@ export default {
   components: {
     Searchbar,
   },
-  props: {
-    films: Array,
-  },
   methods: {
     printFilm(e) {
       this.$emit('printFilm', e);
