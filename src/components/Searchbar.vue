@@ -46,15 +46,9 @@ export default {
   methods: {
     searchFilmByValue() {
       let fullQueryApi = this.queryApi.prefix + this.queryApi.apiKey + this.queryApi.query.prefix;
-      if (this.input.value.length === 0) { // errore ricerca vuota
-        this.input.emptyError = true;
-      } else { // ricerca
-        if (this.input.emptyError) { // reset error
-          this.input.emptyError = false;
-        }
-        if (this.searchFilm.length > 0) {
-          this.searchFilm = [];
-        }
+      if (this.input.value.length === 0) { this.input.emptyError = true; } else { // ricerca
+        if (this.input.emptyError) { this.input.emptyError = false; }
+        if (this.searchFilm.length > 0) { this.searchFilm = []; }
         fullQueryApi += this.input.value;
         // chiamata axios
         axios.get(fullQueryApi)
@@ -68,9 +62,7 @@ export default {
               });
             });
           })
-          .catch((e) => {
-            console.error(e);
-          })
+          .catch((e) => { console.error(e); })
           .then(() => this.searchFilm);
       }
     },
