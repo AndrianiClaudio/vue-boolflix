@@ -1,7 +1,7 @@
 <template>
 <header class="header">
     <Searchbar
-    @printFilm = 'sendFilms($event)'
+    @printFilm = 'printFilm($event)'
     />
 </header>
 </template>
@@ -14,9 +14,12 @@ export default {
   components: {
     Searchbar,
   },
+  props: {
+    films: Array,
+  },
   methods: {
-    sendFilms(e) {
-      this.$emit('getFilms', e);
+    printFilm(e) {
+      this.$emit('printFilm', e);
     },
   },
 };

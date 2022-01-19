@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header
-    @getFilms='printSearched($event)'
+    @printFilm='printSearched($event)'
     />
     <Main
     :films = films

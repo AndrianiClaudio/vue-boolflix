@@ -4,15 +4,17 @@
     :type="input.type"
     v-model="input.value"
     :placeholder="input.placeholder"
-    @keyup.enter="$emit('printFilm',searchFilm),searchFilmByValue()"
+    @keyup.enter="searchFilmByValue(),$emit('printFilm',searchFilm)"
     >
     <button id="searchbar-btn" name="searchbar-btn"
-    @click="$emit('printFilm',searchFilm),searchFilmByValue()"
-    @keyup.enter="$emit('printFilm',searchFilm),searchFilmByValue()"
+    @click="searchFilmByValue(),$emit('printFilm',searchFilm)"
+    @keyup.enter="searchFilmByValue(),$emit('printFilm',searchFilm)"
     >
         {{button.value}}
     </button>
-    <span v-if="input.emptyError">Digita qualcosa da ricercare</span>
+    <span v-if="input.error.emptyError">Digita qualcosa da ricercare</span>
+    <!-- eslint-disable-next-line max-len -->
+    <span v-if="input.error.notFound">Non &eacute; stato trovato nessun film contente il nome richiesto</span>
 </div>
 </template>
 
@@ -28,14 +30,17 @@ export default {
         apiKey: 'c22bfc860e4fafc65337bd37d36134e0',
         query: {
           prefix: '&query=',
-        //   queryRequest: '',
+          queryRequest: '',
         },
       },
       input: {
         type: 'text',
         placeholder: 'Ricerca qui un film',
-        emptyError: false,
         value: '',
+        error: {
+          emptyError: false,
+          notFound: false,
+        },
       },
       button: {
         value: 'cerca',
@@ -45,14 +50,18 @@ export default {
   },
   methods: {
     searchFilmByValue() {
-      let fullQueryApi = this.queryApi.prefix + this.queryApi.apiKey + this.queryApi.query.prefix;
-      if (this.input.value.length === 0) { this.input.emptyError = true; } else { // ricerca
-        if (this.input.emptyError) { this.input.emptyError = false; }
-        if (this.searchFilm.length > 0) { this.searchFilm = []; }
-
-        // const queryTxt = this.input.value.split(' ').join('+');
-        // console.log('queryTxt:', queryTxt);
-        fullQueryApi += this.input.value.split(' ').join('+');
+      if (this.input.value.length === 0) {
+        this.input.error.notFound = false;
+        this.input.error.emptyError = true;
+      } else { // ricerca
+        this.input.error.emptyError = false;
+        this.input.error.notFound = false;
+        if (this.searchFilm.length > 0) {
+          this.searchFilm = [];
+        }
+        this.queryRequest = this.input.value.split(' ').join('+');
+        // eslint-disable-next-line max-len
+        const fullQueryApi = this.queryApi.prefix + this.queryApi.apiKey + this.queryApi.query.prefix + this.queryRequest;
         // chiamata axios
         axios.get(fullQueryApi)
           .then((r) => {
@@ -66,10 +75,21 @@ export default {
             });
           })
           .catch((e) => { console.error(e); })
-          .then(() => this.searchFilm);
+          .then(() => {
+            if (this.searchFilm.length === 0) {
+              this.input.error.notFound = true;
+              this.input.error.emptyError = false;
+            }
+            return this.searchFilm;
+          });
       }
     },
   },
+  // computed: {
+  //   getFilms() {
+  //     return this.searchFilm;
+  //   },
+  // },
 };
 </script>
 
