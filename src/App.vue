@@ -6,7 +6,6 @@
     <Main
     :films = films
     />
-    <!-- :searched = searched -->
   </div>
 </template>
 

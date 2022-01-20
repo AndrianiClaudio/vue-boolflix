@@ -4,11 +4,11 @@
     :type="input.type"
     v-model="input.value"
     :placeholder="input.placeholder"
-    @keyup.enter="searchFilmByValue(),$emit('printFilm',searchFilm)"
+    @keyup.enter="searchFilmByValue(),$emit('printFilm',films)"
     >
     <button id="searchbar-btn" name="searchbar-btn"
-    @click="searchFilmByValue(),$emit('printFilm',searchFilm)"
-    @keyup.enter="searchFilmByValue(),$emit('printFilm',searchFilm)"
+    @click="searchFilmByValue(),$emit('printFilm',films)"
+    @keyup.enter="searchFilmByValue(),$emit('printFilm',films)"
     >
         {{button.value}}
     </button>
@@ -45,7 +45,7 @@ export default {
       button: {
         value: 'cerca',
       },
-      searchFilm: [],
+      films: [],
     };
   },
   methods: {
@@ -56,8 +56,8 @@ export default {
       } else { // ricerca
         this.input.error.emptyError = false;
         this.input.error.notFound = false;
-        if (this.searchFilm.length > 0) {
-          this.searchFilm = [];
+        if (this.films.length > 0) {
+          this.films = [];
         }
         this.queryRequest = this.input.value.split(' ').join('+');
         // eslint-disable-next-line max-len
@@ -66,7 +66,7 @@ export default {
         axios.get(fullQueryApi)
           .then((r) => {
             r.data.results.forEach((el) => {
-              this.searchFilm.push({
+              this.films.push({
                 title: el.title,
                 originalTitle: el.original_title,
                 language: el.original_language,
@@ -76,20 +76,15 @@ export default {
           })
           .catch((e) => { console.error(e); })
           .then(() => {
-            if (this.searchFilm.length === 0) {
+            if (this.films.length === 0) {
               this.input.error.notFound = true;
               this.input.error.emptyError = false;
             }
-            return this.searchFilm;
+            return this.films;
           });
       }
     },
   },
-  // computed: {
-  //   getFilms() {
-  //     return this.searchFilm;
-  //   },
-  // },
 };
 </script>
 
