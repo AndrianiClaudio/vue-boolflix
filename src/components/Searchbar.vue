@@ -59,9 +59,9 @@ export default {
         if (this.films.length > 0) {
           this.films = [];
         }
-        this.queryRequest = this.input.value.split(' ').join('+');
+        this.queryApi.query.queryRequest = this.input.value.split(' ').join('+');
         // eslint-disable-next-line max-len
-        const fullQueryApi = this.queryApi.prefix + this.queryApi.apiKey + this.queryApi.query.prefix + this.queryRequest;
+        const fullQueryApi = this.queryApi.prefix + this.queryApi.apiKey + this.queryApi.query.prefix + this.queryApi.query.queryRequest;
         // chiamata axios
         axios.get(fullQueryApi)
           .then((r) => {
