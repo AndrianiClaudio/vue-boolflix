@@ -4,20 +4,19 @@
     :type="input.type"
     v-model="input.value"
     :placeholder="input.placeholder"
-    @keyup.enter="searchFilmByValue(),$emit('printFilm',cards)"
+    @keyup.enter="searchFilmByValue(),
+    $emit('printFilm',[cards,input.nf_error])"
     >
-    <!-- @keyup.enter="searchFilmByValue(),$emit('printFilm',cards)" -->
+
     <button id="searchbar-btn" name="searchbar-btn"
-    @click="searchFilmByValue(),$emit('printFilm',cards)"
-    @keyup.enter="searchFilmByValue(),$emit('printFilm',cards)"
+    @click="searchFilmByValue(),
+    $emit('printFilm',[cards,input.nf_error])"
+    @keyup.enter="searchFilmByValue(),
+    $emit('printFilm',[cards,input.nf_error])"
     >
         {{button.value}}
     </button>
-    <span v-if="input.error.emptyError">Digita qualcosa da ricercare</span>
-    <!-- eslint-disable-next-line max-len -->
-    <span v-if="input.error.movie.notFound">Non &eacute; stato trovato nessun film contente il nome richiesto</span>
-    <!--  eslint-disable-next-line max-len -->
-    <span v-if="input.error.tv.notFound">Non &eacute; stato trovato nessuna serie contente il nome richiesto</span>
+    <span v-if="input.emptyError">Digita qualcosa da ricercare</span>
 </div>
 </template>
 
@@ -41,14 +40,10 @@ export default {
         type: 'text',
         placeholder: 'Ricerca qui un film',
         value: '',
-        error: {
-          emptyError: false,
-          movie: {
-            notFound: false,
-          },
-          tv: {
-            notFound: false,
-          },
+        emptyError: false,
+        nf_error: {
+          movie: false,
+          tv: false,
         },
       },
       button: {
@@ -61,73 +56,56 @@ export default {
     };
   },
   methods: {
-    getMovie() {
-      this.cards.movie = [];
-      this.input.error.emptyError = false;
-      this.input.error.movie.notFound = false;
-      // if (this.input.error.movie.notFound) {
-      //   this.cards.movie = [];
-      // }
-      this.queryApi.folder = 'movie';
+    axiosCall(array, folder) {
+      array.splice(0, array.length);
+      this.input.emptyError = false;
+      this.queryApi.folder = folder;
       this.queryApi.params.query = this.input.value.split(' ').join('+');
-      // chiamata axios
       axios.get(`${this.queryApi.prefix}${this.queryApi.folder}`, { params: this.queryApi.params })
         .then((r) => {
           r.data.results.forEach((el) => {
-            // console.log(el);
-            this.cards.movie.push({
-              title: el.title,
-              original_title: el.original_title,
-              language: el.original_language,
-              vote: el.vote_average,
-            });
+            if (folder === 'movie') {
+              array.push({
+                title: el.title,
+                original_title: el.original_title,
+                language: el.original_language,
+                vote: el.vote_average,
+              });
+            } else if (folder === 'tv') {
+              array.push({
+                title: el.name,
+                original_title: el.name,
+                language: el.original_language,
+                vote: el.vote_average,
+              });
+            }
           });
         })
         .catch((e) => { console.error(e); })
         .then(() => {
-          if (this.cards.movie.length === 0) {
-            this.input.error.movie.notFound = true;
-            this.input.error.emptyError = false;
+          if (array.length === 0) {
+            if (folder === 'movie') {
+              this.input.nf_error.movie = true;
+            } else if (folder === 'tv') {
+              this.input.nf_error.tv = true;
+            }
           }
         });
     },
+    getMovie() {
+      this.axiosCall(this.cards.movie, 'movie');
+    },
     getTv() {
-      this.cards.tv = [];
-      this.input.error.emptyError = false;
-      this.input.error.tv.notFound = false;
-
-      this.queryApi.folder = 'tv';
-      this.queryApi.params.query = this.input.value.split(' ').join('+');
-      // chiamata axios
-      axios.get(`${this.queryApi.prefix}${this.queryApi.folder}`, { params: this.queryApi.params })
-        .then((r) => {
-          r.data.results.forEach((el) => {
-            this.cards.tv.push({
-              title: el.name,
-              original_title: el.name,
-              language: el.original_language,
-              vote: el.vote_average,
-            });
-          });
-        })
-        .catch((e) => { console.error(e); })
-        .then(() => {
-          if (this.cards.tv.length === 0) {
-            this.input.error.tv.notFound = true;
-            this.input.error.emptyError = false;
-          }
-        });
+      this.axiosCall(this.cards.tv, 'tv');
     },
     searchFilmByValue() {
       if (this.input.value.length === 0) {
-        this.input.error.movie.notFound = false;
-        this.input.error.tv.notFound = false;
-        this.input.error.emptyError = true;
+        this.input.emptyError = true;
       } else {
         this.getMovie();
         this.getTv();
       }
-      return this.cards;
+      return [this.cards, this.input.nf_error];
     },
   },
 };

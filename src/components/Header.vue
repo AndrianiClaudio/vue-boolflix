@@ -1,9 +1,9 @@
 <template>
-<header class="header">
+  <header class="header">
     <Searchbar
     @printFilm = 'printFilm($event)'
     />
-</header>
+  </header>
 </template>
 
 <script>

@@ -5,6 +5,7 @@
     />
     <Main
     :cards = cards
+    :nf_error = nf_error
     />
   </div>
 </template>
@@ -25,12 +26,15 @@ export default {
         movie: [],
         tv: [],
       },
+      nf_error: {
+        movie: false,
+        tv: false,
+      },
     };
   },
   methods: {
     printSearched(e) {
-      this.cards.movie = e.movie;
-      this.cards.tv = e.tv;
+      [this.cards, this.nf_error] = e;
     },
   },
 };

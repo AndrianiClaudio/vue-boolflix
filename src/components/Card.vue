@@ -1,5 +1,4 @@
 <template>
-<!-- <div class="cards"> -->
     <ul class='card'>
         <li>
             <span>
@@ -22,14 +21,21 @@
             </span>
         </li>
     </ul>
-<!-- </div> -->
 </template>
 
 <script>
 export default {
   name: 'Card',
+  data() {
+    return {
+      dataLoad: false,
+    };
+  },
   props: {
     card: Object,
+  },
+  created() {
+    this.dataLoad = true;
   },
 };
 </script>
