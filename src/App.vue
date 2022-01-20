@@ -4,7 +4,7 @@
     @printFilm='printSearched($event)'
     />
     <Main
-    :films = films
+    :cards = cards
     />
   </div>
 </template>
@@ -21,12 +21,16 @@ export default {
   },
   data() {
     return {
-      films: [],
+      cards: {
+        movie: [],
+        tv: [],
+      },
     };
   },
   methods: {
     printSearched(e) {
-      this.films = e;
+      this.cards.movie = e.movie;
+      this.cards.tv = e.tv;
     },
   },
 };
