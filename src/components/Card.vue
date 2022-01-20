@@ -2,22 +2,20 @@
     <ul class='card'>
         <li>
             <span>
-                Titolo: {{card.title}}
+                {{card.title}}
             </span>
         </li>
         <li>
             <span>
-                Titolo originale: {{card.original_title}}
+                {{card.original_title}}
             </span>
         </li>
         <li>
-            <span>
-                Lingua: {{card.language}}
-            </span>
+            <img :src="getUrl(card.language)" :alt="card.language">
         </li>
         <li>
             <span>
-                Voto: {{card.vote}}
+                {{card.vote}}
             </span>
         </li>
     </ul>
@@ -28,14 +26,23 @@ export default {
   name: 'Card',
   data() {
     return {
-      dataLoad: false,
+      flags: {
+        it: 'https://img.icons8.com/office/italy.png',
+        en: 'https://img.icons8.com/color/usa.png',
+        fr: 'https://img.icons8.com/color/france.png',
+      },
     };
   },
   props: {
     card: Object,
   },
-  created() {
-    this.dataLoad = true;
+  methods: {
+    getUrl(lan) {
+      if (this.flags[lan]) {
+        return this.flags[lan];
+      }
+      return '';
+    },
   },
 };
 </script>
