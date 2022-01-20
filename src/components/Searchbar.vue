@@ -102,9 +102,12 @@ export default {
       if (this.input.value.length === 0) {
         this.input.emptyError = true;
       } else {
+        this.input.nf_error.movie = false;
+        this.input.nf_error.tv = false;
         this.getMovie();
         this.getTv();
       }
+      this.input.value = '';
       return [this.cards, this.input.nf_error];
     },
   },
