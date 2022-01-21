@@ -53,6 +53,7 @@ export default {
         movie: [],
         tv: [],
       },
+      poster_path: { prefix: 'https://image.tmdb.org/t/p/', dim: 'w300' },
     };
   },
   methods: {
@@ -70,6 +71,7 @@ export default {
                 original_title: el.original_title,
                 language: el.original_language,
                 vote: el.vote_average,
+                poster: this.poster_path.prefix + this.poster_path.dim + el.poster_path,
               });
             } else if (folder === 'tv') {
               array.push({
@@ -77,6 +79,7 @@ export default {
                 original_title: el.original_name,
                 language: el.original_language,
                 vote: el.vote_average,
+                poster: this.poster_path.prefix + this.poster_path.dim + el.poster_path,
               });
             }
           });
@@ -102,12 +105,12 @@ export default {
       if (this.input.value.length === 0) {
         this.input.emptyError = true;
       } else {
-        this.input.emptyError = false;
         this.input.nf_error.movie = false;
         this.input.nf_error.tv = false;
         this.getMovie();
         this.getTv();
-        this.input.value = '';
+        this.input.value = ' ';
+        this.input.emptyError = false;
       }
       return [this.cards, this.input.nf_error];
     },

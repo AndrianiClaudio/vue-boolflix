@@ -1,23 +1,26 @@
 <template>
     <ul class='card'>
-        <li>
-            <span>
-                {{card.title}}
-            </span>
-        </li>
-        <li>
-            <span>
-                {{card.original_title}}
-            </span>
-        </li>
-        <li>
-            <img :src="getUrl(card.language)" :alt="card.language">
-        </li>
-        <li>
-            <span>
-                {{card.vote}}
-            </span>
-        </li>
+      <li>
+        <img :src="card.poster" alt="Immagine poster non trovata">
+      </li>
+      <li>
+          <span>
+              {{card.title}}
+          </span>
+      </li>
+      <li>
+          <span>
+              {{card.original_title}}
+          </span>
+      </li>
+      <li>
+          <img :src="getUrl(card.language)" :alt="card.language">
+      </li>
+      <li>
+          <span>
+              {{card.vote}}
+          </span>
+      </li>
     </ul>
 </template>
 
@@ -47,6 +50,5 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang='scss' scoped>
 </style>
