@@ -74,7 +74,7 @@ export default {
             } else if (folder === 'tv') {
               array.push({
                 title: el.name,
-                original_title: el.name,
+                original_title: el.original_name,
                 language: el.original_language,
                 vote: el.vote_average,
               });
@@ -102,12 +102,13 @@ export default {
       if (this.input.value.length === 0) {
         this.input.emptyError = true;
       } else {
+        this.input.emptyError = false;
         this.input.nf_error.movie = false;
         this.input.nf_error.tv = false;
         this.getMovie();
         this.getTv();
+        this.input.value = '';
       }
-      this.input.value = '';
       return [this.cards, this.input.nf_error];
     },
   },
