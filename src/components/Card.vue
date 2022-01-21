@@ -75,10 +75,16 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.svg-inline--fa.fullStar {
-  color: gold;
+.fullStar {
+  // font-size: 1.15rem;
+  path{
+    fill:gold;
+  }
 }
-.svg-inline--fa.emptyStar {
-  color:grey;
+.emptyStar {
+  // font-size: 1.15rem;
+  path {
+    fill:grey;
+  }
 }
 </style>

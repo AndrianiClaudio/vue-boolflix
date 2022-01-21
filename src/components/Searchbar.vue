@@ -7,11 +7,8 @@
     @keyup.enter="searchFilmByValue(),
     $emit('printFilm',[cards,input.nf_error])"
     >
-
     <button id="searchbar-btn" name="searchbar-btn"
     @click="searchFilmByValue(),
-    $emit('printFilm',[cards,input.nf_error])"
-    @keyup.enter="searchFilmByValue(),
     $emit('printFilm',[cards,input.nf_error])"
     >
         {{button.value}}
@@ -59,13 +56,13 @@ export default {
   methods: {
     axiosCall(array, folder) {
       array.splice(0, array.length);
-      this.input.emptyError = false;
       this.queryApi.folder = folder;
       this.queryApi.params.query = this.input.value.split(' ').join('+');
       axios.get(`${this.queryApi.prefix}${this.queryApi.folder}`, { params: this.queryApi.params })
         .then((r) => {
           r.data.results.forEach((el) => {
             if (folder === 'movie') {
+              this.input.nf_error.movie = false;
               array.push({
                 title: el.title,
                 original_title: el.original_title,
@@ -74,6 +71,7 @@ export default {
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
               });
             } else if (folder === 'tv') {
+              this.input.nf_error.tv = false;
               array.push({
                 title: el.name,
                 original_title: el.original_name,
@@ -105,12 +103,12 @@ export default {
       if (this.input.value.length === 0) {
         this.input.emptyError = true;
       } else {
+        this.input.emptyError = false;
         this.input.nf_error.movie = false;
         this.input.nf_error.tv = false;
         this.getMovie();
         this.getTv();
-        this.input.value = ' ';
-        this.input.emptyError = false;
+        this.input.value = '';
       }
       return [this.cards, this.input.nf_error];
     },

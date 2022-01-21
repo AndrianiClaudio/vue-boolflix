@@ -21,7 +21,7 @@
       <strong v-if="nf_error.tv">Nessuna serie tv trovata</strong>
     </div>
     <div v-if='nf_error.movie && nf_error.tv'>
-      Non &eacute; stato trovato nessun film e nessuna serie
+      <strong>Non &eacute; stato trovato nessun film e nessuna serie</strong>
     </div>
   </main>
 </template>
