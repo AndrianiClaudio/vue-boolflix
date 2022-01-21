@@ -100,12 +100,12 @@ export default {
       this.axiosCall(this.cards.tv, 'tv');
     },
     searchFilmByValue() {
+      this.input.emptyError = false;
+      this.input.nf_error.movie = false;
+      this.input.nf_error.tv = false;
       if (this.input.value.length === 0) {
         this.input.emptyError = true;
       } else {
-        this.input.emptyError = false;
-        this.input.nf_error.movie = false;
-        this.input.nf_error.tv = false;
         this.getMovie();
         this.getTv();
         this.input.value = '';
@@ -116,6 +116,10 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang='scss' scoped>
+@import '../assets/scss/partials/_variables.scss';
+@import '../assets/scss/partials/_mixins.scss';
+input {
+  @include padding($y: .5rem);
+}
 </style>

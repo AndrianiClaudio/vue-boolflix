@@ -18,19 +18,20 @@
       </li>
       <li>
           <span>
-              {{card.vote}}
+              ({{card.vote}} / 10)
               <font-awesome-icon
-              v-for = '(star,index) in Math.round(card.vote)'
+              v-for = '(star,index) in Math.round(card.vote/2)'
               :key= '"full_star-"+index'
               icon='star'
               class="fullStar"
               />
               <font-awesome-icon
-              v-for = '(star,index) in 10 - Math.round(card.vote)'
+              v-for = '(star,index) in 5 - Math.round(card.vote/2)'
               :key= '"empty_star-"+index'
               icon='star'
               class="emptyStar"
               />
+              ({{card.vote/2}} / 5)
           </span>
       </li>
     </ul>
