@@ -53,7 +53,7 @@ export default {
       // la dimensione del poster dei film
       poster_path: {
         prefix: 'https://image.tmdb.org/t/p/',
-        dim: 'w300',
+        dim: 'w342',
       },
       // dati relativi alla searchbar
       input: {
@@ -91,6 +91,7 @@ export default {
                 language: el.original_language,
                 vote: el.vote_average,
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
+                overview: el.overview,
               });
             } else if (folder === 'tv') {
               this.nf_error.tv = false;
@@ -100,6 +101,7 @@ export default {
                 language: el.original_language,
                 vote: el.vote_average,
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
+                overview: el.overview,
               });
             }
           });
@@ -156,7 +158,8 @@ export default {
     text-transform: uppercase;
     padding-right: 2rem;
   }
-  input {
+  input,
+  button {
     padding: .25rem .5rem
   }
 }

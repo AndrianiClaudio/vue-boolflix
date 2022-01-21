@@ -19,6 +19,9 @@
         {{card.original_title}}
       </div>
       <div>
+        {{card.overview}}
+      </div>
+      <div>
         <!-- ottieni immagine della bandiera, se presente, altrimenti scrive iniziale lingua -->
         <img :src="getFlag(card.language)" :alt="card.language">
       </div>
@@ -27,7 +30,7 @@
         <span>
           <!-- v-for = '(star,index) in Math.round(card.vote/2)' -->
           <font-awesome-icon
-          v-for = '(star,index) in roundVote'
+          v-for = '(star,index) in Math.round(card.vote/2)'
           :key= '"full_star-"+index'
           icon='star'
           class="fullStar"
@@ -99,9 +102,13 @@ export default {
   position: relative;
   @include flex($ali:center,$jus:center);
   background-color: $cardBgColor;
-  width: 320px;
-  height: 450px;
+  width: calc(342px + 1rem);
+  height: 500px;
   overflow: hidden;
+  border: 1px solid white;
+  img.poster {
+    max-height: calc(500px - 1rem);
+  }
   .hover-container {
     .fullStar {
       path{

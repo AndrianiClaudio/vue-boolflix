@@ -61,7 +61,7 @@ export default {
       @include flex($wra:wrap,$gap:0 2.5rem);
       padding: 1rem;
       min-width: 500px;
-        gap:1.5rem 2.5rem;
+      gap:1.5rem 2.5rem;
       h2 {
         width:100%;
         text-align: center;
