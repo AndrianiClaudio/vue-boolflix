@@ -1,50 +1,55 @@
 <template>
-<div>
-
-    <ul class='card' >
-      <li
-      @mouseover="activeHover"
-      @mouseleave="resetHover">
-        <img :src="card.poster" alt="Immagine poster non trovata">
-      </li>
-      <li v-if="hover">
-          <span>
-              {{card.title}}
-          </span>
-      </li>
-      <li v-if="hover">
-          <span>
-              {{card.original_title}}
-          </span>
-      </li>
-      <li v-if="hover">
-          <img :src="getUrl(card.language)" :alt="card.language">
-      </li>
-      <li v-if="hover">
-          <span>
-              ({{card.vote}} / 10)
-              <font-awesome-icon
-              v-for = '(star,index) in Math.round(card.vote/2)'
-              :key= '"full_star-"+index'
-              icon='star'
-              class="fullStar"
-              />
-              <font-awesome-icon
-              v-for = '(star,index) in 5 - Math.round(card.vote/2)'
-              :key= '"empty_star-"+index'
-              icon='star'
-              class="emptyStar"
-              />
-              ({{card.vote/2}} / 5)
-          </span>
-      </li>
-    </ul>
-</div>
+  <div class="card"
+  @mouseover="activeHover"
+  @mouseleave="resetHover"
+  >
+    <!-- di base mostra immagine poster -->
+    <img
+    v-if="!hover"
+    class="poster"
+    :src="card.poster" alt="Immagine poster non trovata"
+    >
+    <!-- all'hover sulla card viene impostata a true la variabile hover -->
+    <!-- mostra informazioni card -->
+    <div v-else class="hover-container">
+      <div>
+        {{card.title}}
+      </div>
+      <div>
+        {{card.original_title}}
+      </div>
+      <div>
+        <!-- ottieni immagine della bandiera, se presente, altrimenti scrive iniziale lingua -->
+        <img :src="getFlag(card.language)" :alt="card.language">
+      </div>
+      <div>
+        <!-- stelle gialle-->
+        <span>
+          <!-- v-for = '(star,index) in Math.round(card.vote/2)' -->
+          <font-awesome-icon
+          v-for = '(star,index) in roundVote'
+          :key= '"full_star-"+index'
+          icon='star'
+          class="fullStar"
+          />
+        <!-- stelle grigie -->
+          <font-awesome-icon
+          v-for = '(star,index) in 5 - Math.round(card.vote/2)'
+          :key= '"empty_star-"+index'
+          icon='star'
+          class="emptyStar"
+          />
+          <!-- mostra voto in numero -->
+          ({{card.vote/2}} / 5)
+        </span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons'; // fas fa-star
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(faStar);
@@ -68,15 +73,14 @@ export default {
     card: Object,
   },
   methods: {
-    getUrl(lan) {
+    // ottieni bandiera da lingua, se presente nei data
+    getFlag(lan) {
       if (this.flags[lan]) {
         return this.flags[lan];
       }
       return '';
     },
-    getPath() {
-      return this.card.poster;
-    },
+    // funzioni gestione hover
     activeHover() {
       this.hover = true;
     },
@@ -88,18 +92,26 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+@import '../assets/scss/partials/_variables.scss';
+@import '../assets/scss/partials/_mixins.scss';
+
 .card {
-  width: 300px;
-  .fullStar {
-    // font-size: 1.15rem;
-    path{
-      fill:gold;
+  position: relative;
+  @include flex($ali:center,$jus:center);
+  background-color: $cardBgColor;
+  width: 320px;
+  height: 450px;
+  overflow: hidden;
+  .hover-container {
+    .fullStar {
+      path{
+        fill:gold;
+      }
     }
-  }
-  .emptyStar {
-    // font-size: 1.15rem;
-    path {
-      fill:grey;
+    .emptyStar {
+      path {
+        fill:grey;
+      }
     }
   }
 }

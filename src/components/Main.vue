@@ -1,25 +1,33 @@
 <template>
   <main class="main">
+    <!-- container che si mostra soltanto se ci sono film o serie tv da mostrare -->
     <div class="container" v-if="cards.movie.length > 0 || cards.tv.length > 0">
+      <!-- FILM -->
       <section id="movie">
-          <h2>Film</h2>
-          <Card
-          v-for="(card,index) in cards.movie"
-          :key='"movie-"+index'
-          :card = card
-          />
+        <h2>Film</h2>
+        <!-- passa al componente Card tutti i film -->
+        <Card
+        v-for="(card,index) in cards.movie"
+        :key='"movie-"+index'
+        :card = card
+        />
+        <!-- Array film vuoto -->
+        <strong v-if="nf_error.movie">Nessun film trovato</strong>
       </section>
-      <strong v-if="nf_error.movie">Nessun film trovato</strong>
+      <!-- SERIE TV -->
       <section id="series">
-          <h2>Serie TV</h2>
-          <Card
-          v-for="(card,index) in cards.tv"
-          :key='"series-"+index'
-          :card = card
-          />
+        <h2>Serie TV</h2>
+        <!-- passa al componente Card tutte le serie tv -->
+        <Card
+        v-for="(card,index) in cards.tv"
+        :key='"series-"+index'
+        :card = card
+        />
+        <!-- Array serie tv vuoto -->
+        <strong v-if="nf_error.tv">Nessuna serie tv trovata</strong>
       </section>
-      <strong v-if="nf_error.tv">Nessuna serie tv trovata</strong>
     </div>
+    <!-- errore: risultano essere vuoti tutti gli array(solo se la ricerca é stata effettuata) -->
     <div v-if='nf_error.movie && nf_error.tv'>
       <strong>Non &eacute; stato trovato nessun film e nessuna serie</strong>
     </div>
@@ -53,7 +61,7 @@ export default {
       @include flex($wra:wrap,$gap:0 2.5rem);
       padding: 1rem;
       min-width: 500px;
-        // gap:0 2.5rem;
+        gap:1.5rem 2.5rem;
       h2 {
         width:100%;
         text-align: center;

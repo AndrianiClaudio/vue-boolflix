@@ -1,19 +1,24 @@
 <template>
 <div class="searchbar">
-    <span v-if="input.emptyError" class="emptyError">Digita qualcosa da ricercare!!</span>
-    <input
-    :type="input.type"
-    v-model="input.value"
-    :placeholder="input.placeholder"
-    @keyup.enter="searchFilmByValue(),
-    $emit('printFilm',[cards,input.nf_error])"
-    >
-    <!-- <button id="searchbar-btn" name="searchbar-btn"
-    @click="searchFilmByValue(),
-    $emit('printFilm',[cards,input.nf_error])"
-    > -->
-        <!-- {{button.value}} -->
-    <!-- </button> -->
+  <!--
+    ricerca di film e serie tv alla pressione del tasto enter o al click sul bottone
+    se non si digita niente compare span di errore
+  -->
+  <span v-if="input.emptyError" class="emptyError">Digita qualcosa da ricercare!!</span>
+  <!-- valore della input e del button salvato nei data -->
+  <input
+  :type="input.type"
+  v-model="input.value"
+  :placeholder="input.placeholder"
+  @keyup.enter="searchFilmByValue(),
+  $emit('printFilm',[cards,nf_error])"
+  >
+  <button id="searchbar-btn" name="searchbar-btn"
+  @click="searchFilmByValue(),
+  $emit('printFilm',[cards,nf_error])"
+  >
+      {{button.value}}
+  </button>
 </div>
 </template>
 
@@ -24,45 +29,62 @@ export default {
   name: 'Searchbar',
   data() {
     return {
+      // dati trasmessi ad header tramite emit
+      cards: {
+        movie: [],
+        tv: [],
+      },
+      nf_error: {
+        movie: false,
+        tv: false,
+      },
+      // dati della Api tramite la quale si accede ai dati dei film
       queryApi: {
         prefix: 'https://api.themoviedb.org/3/search/',
-        folder: '',
         params: {
           api_key: 'c22bfc860e4fafc65337bd37d36134e0',
           language: 'it-IT',
+          // query: verrá riempita con input.value
           query: '',
         },
       },
+      // poster_path contiene
+      // il prefisso del link contenente le immagini poster dei film
+      // la dimensione del poster dei film
+      poster_path: {
+        prefix: 'https://image.tmdb.org/t/p/',
+        dim: 'w300',
+      },
+      // dati relativi alla searchbar
       input: {
         type: 'text',
         placeholder: 'Ricerca film o serie tv',
         value: '',
         emptyError: false,
-        nf_error: {
-          movie: false,
-          tv: false,
-        },
       },
-      // button: {
-      //   value: 'cerca',
-      // },
-      cards: {
-        movie: [],
-        tv: [],
+      button: {
+        value: 'cerca',
       },
-      poster_path: { prefix: 'https://image.tmdb.org/t/p/', dim: 'w300' },
     };
   },
   methods: {
+    /**
+     * funzione contenente una chiamata axios.
+     * array sará uno degli array di this.cards
+     * folder sara una stringa che indica la cartella in cui la api dovra cercare
+     */
     axiosCall(array, folder) {
+      // elimina ogni eventuale ricerca precedente
       array.splice(0, array.length);
-      this.queryApi.folder = folder;
-      this.queryApi.params.query = this.input.value.split(' ').join('+');
-      axios.get(`${this.queryApi.prefix}${this.queryApi.folder}`, { params: this.queryApi.params })
+      // elimina ogni eventuale spazio e divide le parole con +
+      this.queryApi.params.query = this.input.value.trim().split(' ').join('+');
+      axios.get(`${this.queryApi.prefix}${folder}`, { params: this.queryApi.params })
         .then((r) => {
           r.data.results.forEach((el) => {
+            // carica i dati ricevuti negli array in base alla folder
+            // diverse folder hanno attributi di nome differente!!
             if (folder === 'movie') {
-              this.input.nf_error.movie = false;
+              this.nf_error.movie = false;
               array.push({
                 title: el.title,
                 original_title: el.original_title,
@@ -71,7 +93,7 @@ export default {
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
               });
             } else if (folder === 'tv') {
-              this.input.nf_error.tv = false;
+              this.nf_error.tv = false;
               array.push({
                 title: el.name,
                 original_title: el.original_name,
@@ -82,35 +104,43 @@ export default {
             }
           });
         })
-        .catch((e) => { console.error(e); })
+        .catch((e) => { console.error(e); }) // se ci sono errori nella chiamata axios
         .then(() => {
+          // imposta a true variabili di nf_error se un array riceve 0 dati
           if (array.length === 0) {
             if (folder === 'movie') {
-              this.input.nf_error.movie = true;
+              this.nf_error.movie = true;
             } else if (folder === 'tv') {
-              this.input.nf_error.tv = true;
+              this.nf_error.tv = true;
             }
           }
         });
     },
+
     getMovie() {
       this.axiosCall(this.cards.movie, 'movie');
     },
     getTv() {
       this.axiosCall(this.cards.tv, 'tv');
     },
+    /**
+     * Funzione chiamata al momento del click sulla searchbar
+     * restituisce e invia a Header this.cards e this.nf_error
+     *  */
     searchFilmByValue() {
+      // ad ogni nuova ricerca resetta ogni errore
       this.input.emptyError = false;
-      this.input.nf_error.movie = false;
-      this.input.nf_error.tv = false;
-      if (this.input.value.length === 0) {
+      this.nf_error.movie = false;
+      this.nf_error.tv = false;
+      if (this.input.value.length === 0) { // se si ricerca una stringa vuota
         this.input.emptyError = true;
       } else {
         this.getMovie();
         this.getTv();
+        // reset valore input searchbar
         this.input.value = '';
       }
-      return [this.cards, this.input.nf_error];
+      return [this.cards, this.nf_error];
     },
   },
 };

@@ -1,6 +1,10 @@
 <template>
   <header class="header">
     <h1>Boolflix</h1>
+    <!--
+      Searchbar invia tramite emit
+      ...attiva funzione per passare i dati al componente App.vue
+     -->
     <Searchbar
     @printFilm = 'printFilm($event)'
     />
@@ -16,6 +20,7 @@ export default {
     Searchbar,
   },
   methods: {
+    // funzione di passaggio dati
     printFilm(e) {
       this.$emit('printFilm', e);
     },
