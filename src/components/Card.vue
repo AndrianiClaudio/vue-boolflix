@@ -1,22 +1,26 @@
 <template>
-    <ul class='card'>
-      <li>
+<div>
+
+    <ul class='card' >
+      <li
+      @mouseover="activeHover"
+      @mouseleave="resetHover">
         <img :src="card.poster" alt="Immagine poster non trovata">
       </li>
-      <li>
+      <li v-if="hover">
           <span>
               {{card.title}}
           </span>
       </li>
-      <li>
+      <li v-if="hover">
           <span>
               {{card.original_title}}
           </span>
       </li>
-      <li>
+      <li v-if="hover">
           <img :src="getUrl(card.language)" :alt="card.language">
       </li>
-      <li>
+      <li v-if="hover">
           <span>
               ({{card.vote}} / 10)
               <font-awesome-icon
@@ -35,6 +39,7 @@
           </span>
       </li>
     </ul>
+</div>
 </template>
 
 <script>
@@ -51,6 +56,7 @@ export default {
   },
   data() {
     return {
+      hover: false,
       flags: {
         it: 'https://img.icons8.com/office/italy.png',
         en: 'https://img.icons8.com/color/usa.png',
@@ -71,21 +77,30 @@ export default {
     getPath() {
       return this.card.poster;
     },
+    activeHover() {
+      this.hover = true;
+    },
+    resetHover() {
+      this.hover = false;
+    },
   },
 };
 </script>
 
 <style lang='scss' scoped>
-.fullStar {
-  // font-size: 1.15rem;
-  path{
-    fill:gold;
+.card {
+  width: 300px;
+  .fullStar {
+    // font-size: 1.15rem;
+    path{
+      fill:gold;
+    }
   }
-}
-.emptyStar {
-  // font-size: 1.15rem;
-  path {
-    fill:grey;
+  .emptyStar {
+    // font-size: 1.15rem;
+    path {
+      fill:grey;
+    }
   }
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
 <div class="searchbar">
+    <span v-if="input.emptyError" class="emptyError">Digita qualcosa da ricercare!!</span>
     <input
     :type="input.type"
     v-model="input.value"
@@ -7,13 +8,12 @@
     @keyup.enter="searchFilmByValue(),
     $emit('printFilm',[cards,input.nf_error])"
     >
-    <button id="searchbar-btn" name="searchbar-btn"
+    <!-- <button id="searchbar-btn" name="searchbar-btn"
     @click="searchFilmByValue(),
     $emit('printFilm',[cards,input.nf_error])"
-    >
-        {{button.value}}
-    </button>
-    <span v-if="input.emptyError">Digita qualcosa da ricercare</span>
+    > -->
+        <!-- {{button.value}} -->
+    <!-- </button> -->
 </div>
 </template>
 
@@ -29,13 +29,13 @@ export default {
         folder: '',
         params: {
           api_key: 'c22bfc860e4fafc65337bd37d36134e0',
-          language: 'en-US',
+          language: 'it-IT',
           query: '',
         },
       },
       input: {
         type: 'text',
-        placeholder: 'Ricerca qui un film',
+        placeholder: 'Ricerca film o serie tv',
         value: '',
         emptyError: false,
         nf_error: {
@@ -43,9 +43,9 @@ export default {
           tv: false,
         },
       },
-      button: {
-        value: 'cerca',
-      },
+      // button: {
+      //   value: 'cerca',
+      // },
       cards: {
         movie: [],
         tv: [],
@@ -119,7 +119,15 @@ export default {
 <style lang='scss' scoped>
 @import '../assets/scss/partials/_variables.scss';
 @import '../assets/scss/partials/_mixins.scss';
-input {
-  @include padding($y: .5rem);
+.searchbar {
+  color: white;
+  padding-right: 3rem;
+  .emptyError {
+    text-transform: uppercase;
+    padding-right: 2rem;
+  }
+  input {
+    padding: .25rem .5rem
+  }
 }
 </style>

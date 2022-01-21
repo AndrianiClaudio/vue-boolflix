@@ -41,6 +41,28 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss' scoped>
+@import '../assets/scss/partials/_variables.scss';
+@import '../assets/scss/partials/_mixins.scss';
+.main {
+  background-color: $mainBgColor;
+  min-height: calc(100vh - $headerHeight);
+  color: white;
+  .container {
+    section {
+      @include flex($wra:wrap,$gap:0 2.5rem);
+      padding: 1rem;
+      min-width: 500px;
+        // gap:0 2.5rem;
+      h2 {
+        width:100%;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 2rem;
+        padding: 1.5rem;
+      }
+  }
 
+  }
+}
 </style>

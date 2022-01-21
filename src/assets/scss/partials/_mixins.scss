@@ -1,16 +1,7 @@
-@mixin flex($ali:null,$jus:null) {
+@mixin flex($ali:null,$jus:null,$wra:null,$gap:null) {
     display: flex;
     align-items: $ali;
     justify-content: $jus;
-}
-@mixin padding($x:null,$y:null,$r:null,$l:null,$t:null,$b:null) {
-    @if($x) {
-        padding-left: $x;
-        padding-right: $x;
-    }
-    @if($y) {
-        padding-top: $y;
-        padding-bottom: $y;
-    }
-    padding: $t $r $b $l;
+    flex-wrap: $wra;
+    gap: $gap;
 }

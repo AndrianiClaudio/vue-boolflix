@@ -29,10 +29,13 @@ export default {
 .header {
   @include flex(center,space-between);
   height: $headerHeight;
-  @include padding($x:3rem);
+  background-color: $headerBgColor;
   h1{
+    padding-left: 3rem;
     font-size: $titleFont;
     color: $titleColor;
+    text-transform: uppercase;
+    font-weight: normal;
   }
 }
 </style>
