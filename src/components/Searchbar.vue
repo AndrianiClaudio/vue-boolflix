@@ -71,7 +71,7 @@ export default {
                 original_title: el.original_title,
                 language: el.original_language,
                 vote: el.vote_average,
-                poster: this.poster_path.prefix + this.poster_path.dim + el.poster_path,
+                poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
               });
             } else if (folder === 'tv') {
               array.push({
@@ -79,7 +79,7 @@ export default {
                 original_title: el.original_name,
                 language: el.original_language,
                 vote: el.vote_average,
-                poster: this.poster_path.prefix + this.poster_path.dim + el.poster_path,
+                poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
               });
             }
           });
