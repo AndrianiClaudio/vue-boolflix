@@ -12,22 +12,26 @@
     <!-- all'hover sulla card viene impostata a true la variabile hover -->
     <!-- mostra informazioni card -->
     <div v-else class="hover-container">
-      <div>
-        {{card.title}}
+      <div class='card-detail card-title'>
+        <strong>Titolo:</strong>
+        <span>{{card.title}}</span>
       </div>
-      <div>
-        {{card.original_title}}
+      <!-- mostra nome originale solo diverso dal titolo mostrato -->
+      <div class="card-detail card-original-title" v-if="card.title !== card.original_title">
+        <strong>Titolo originale:</strong>
+        <span>{{card.original_title}}</span>
       </div>
-      <div>
-        {{card.overview}}
+      <div class='card-detail card-overview' v-if="card.overview">
+        <strong>Overiew:</strong>
+        <p>{{card.overview}}</p>
       </div>
-      <div>
-        <!-- ottieni immagine della bandiera, se presente, altrimenti scrive iniziale lingua -->
+      <div class='card-detail card-language'>
+      <!-- ottieni immagine della bandiera, se presente, altrimenti scrive iniziale lingua -->
         <img :src="getFlag(card.language)" :alt="card.language">
       </div>
-      <div>
+      <div class='card-detail card-vote' v-if="card.vote > 0">
         <!-- stelle gialle-->
-        <span>
+        <strong>Voto:</strong>
           <!-- v-for = '(star,index) in Math.round(card.vote/2)' -->
           <font-awesome-icon
           v-for = '(star,index) in Math.round(card.vote/2)'
@@ -42,9 +46,6 @@
           icon='star'
           class="emptyStar"
           />
-          <!-- mostra voto in numero -->
-          ({{card.vote/2}} / 5)
-        </span>
       </div>
     </div>
   </div>
@@ -99,17 +100,31 @@ export default {
 @import '../assets/scss/partials/_mixins.scss';
 
 .card {
-  position: relative;
   @include flex($ali:center,$jus:center);
+  position: relative;
   background-color: $cardBgColor;
-  width: calc(342px + 1rem);
-  height: 500px;
+  width: calc($cardWidth + 1rem);
+  height: $cardHeight;
   overflow: hidden;
   border: 1px solid white;
   img.poster {
-    max-height: calc(500px - 1rem);
+    max-height: calc($cardHeight - 1rem);
   }
   .hover-container {
+    .card-detail {
+      font-size: 1.15rem;
+      strong {
+      padding-right: .5rem;
+      }
+      .card-language {
+        img {
+          margin: 0 auto;
+        }
+      }
+      p {
+        display: inline;
+      }
+    //stelle per il voto
     .fullStar {
       path{
         fill:gold;
@@ -120,6 +135,7 @@ export default {
         fill:grey;
       }
     }
+   }
   }
 }
 </style>
