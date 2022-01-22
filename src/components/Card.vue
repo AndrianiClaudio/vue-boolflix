@@ -30,7 +30,11 @@
       <!-- ottieni immagine della bandiera, se presente, altrimenti scrive iniziale lingua -->
         <strong>Language: </strong>
         <!-- <img :src="getFlag(card.language)" :alt="card.language"> -->
+<<<<<<< HEAD
         <span class="flag">{{getFlag(card.language)}}</span>
+=======
+        {{getFlag(card.language)}}
+>>>>>>> d3239560260f9fe4dcc4aeb70e0eebcc40e203aa
       </div>
       <div class='card-detail card-vote' v-if="card.vote > 0">
         <!-- stelle gialle-->
@@ -160,6 +164,14 @@ export default {
 
         }
       }
+<<<<<<< HEAD
+=======
+    }
+    &.card-language {
+      @include flex($ali:center);
+      text-align: center;
+    }
+>>>>>>> d3239560260f9fe4dcc4aeb70e0eebcc40e203aa
    }
   }
 }
