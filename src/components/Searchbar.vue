@@ -4,21 +4,25 @@
     ricerca di film e serie tv alla pressione del tasto enter o al click sul bottone
     se non si digita niente compare span di errore
   -->
-  <span v-if="input.emptyError" class="emptyError">Digita qualcosa da ricercare!!</span>
+  <div class="error-container">
+    <span v-if="input.emptyError" class="emptyError">Digita qualcosa da ricercare!!</span>
+  </div>
   <!-- valore della input e del button salvato nei data -->
-  <input
-  :type="input.type"
-  v-model="input.value"
-  :placeholder="input.placeholder"
-  @keyup.enter="searchFilmByValue(),
-  $emit('printFilm',[cards,nf_error])"
-  >
-  <button id="searchbar-btn" name="searchbar-btn"
-  @click="searchFilmByValue(),
-  $emit('printFilm',[cards,nf_error])"
-  >
-      {{button.value}}
-  </button>
+  <div class="container">
+    <input
+    :type="input.type"
+    v-model="input.value"
+    :placeholder="input.placeholder"
+    @keyup.enter="searchFilmByValue(),
+    $emit('printFilm',[cards,nf_error])"
+    >
+    <button id="searchbar-btn" name="searchbar-btn"
+    @click="searchFilmByValue(),
+    $emit('printFilm',[cards,nf_error])"
+    >
+        {{button.value}}
+    </button>
+  </div>
 </div>
 </template>
 
