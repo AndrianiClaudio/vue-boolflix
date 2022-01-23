@@ -100,7 +100,8 @@ export default {
 @import '../assets/scss/partials/_mixins.scss';
 
 .card {
-  @include flex($ali:center,$jus:center);
+  // @include flex($ali:center,$jus:center);
+  @include flex();
   position: relative;
   background-color: $cardBgColor;
   width: calc($cardWidth + 1rem);
@@ -109,8 +110,10 @@ export default {
   border: 1px solid white;
   img.poster {
     max-height: calc($cardHeight - 1rem);
+    margin: auto auto;
   }
   .hover-container {
+    margin: 1.25rem;
     .card-detail {
       font-size: 1.15rem;
       strong {
