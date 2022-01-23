@@ -60,6 +60,11 @@
         <strong>Cast: </strong>
         {{getCast()}}
       </div>
+      <div class='card-detail card-genders'
+      v-if="card.genres.length > 0">
+        <strong>Genres: </strong>
+        {{getGens()}}
+      </div>
     </div>
   </div>
 </template>
@@ -91,6 +96,17 @@ export default {
     card: Object,
   },
   methods: {
+    getGens() {
+      let genresStr = '';
+      this.card.genres.forEach((element, index) => {
+        // console.log(index);
+        genresStr += element;
+        if (index < this.card.genres.length - 1) {
+          genresStr += ', ';
+        }
+      });
+      return genresStr;
+    },
     getCast() {
       let castString = '';
       let i = 0;
@@ -123,16 +139,17 @@ export default {
   // @include flex($ali:center,$jus:center);
   @include flex();
   position: relative;
-  background-color: $cardBgColor;
-  width: calc($cardWidth + 1rem);
-  height: $cardHeight;
   overflow: hidden;
+  background-color: $cardBgColor;
+  width: calc($cardWidth + .5rem);
+  height: $cardHeight;
   border: 1px solid white;
   img.poster {
     max-height: calc($cardHeight - 1rem);
     margin: auto auto;
   }
   .hover-container {
+    // overflow-y: auto;
     margin: 1.25rem;
     .card-detail {
       font-size: 1.1rem;
@@ -145,7 +162,7 @@ export default {
       }
       //paragrafo contenente descrzione 'overview'
       &.card-overview {
-        max-height: 320px;
+        max-height:290px;
         overflow: auto;
         p {
           display: inline;

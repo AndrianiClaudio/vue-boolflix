@@ -62,6 +62,16 @@ export default {
           // query: '',
         },
       },
+      apiGen: {
+        prefix: 'https://api.themoviedb.org/3/genre/',
+        post: '/list',
+        params: {
+          api_key: 'c22bfc860e4fafc65337bd37d36134e0',
+          language: 'it-IT',
+          // query: verrá riempita con input.value
+          // query: '',
+        },
+      },
       // poster_path contiene
       // il prefisso del link contenente le immagini poster dei film
       // la dimensione del poster dei film
@@ -82,13 +92,27 @@ export default {
     };
   },
   methods: {
+
+    getGenres(f, arrayGen) {
+      const genresNames = [];
+      axios.get(`${this.apiGen.prefix}${f}/${this.apiGen.post}`, { params: this.apiGen.params })
+        .then((r) => {
+          r.data.genres.forEach((el) => {
+            if (arrayGen.includes(el.id)) {
+              console.log('arrayGenIncludes: ', el.name);
+              genresNames.push(el.name);
+            }
+          });
+        });
+      return genresNames;
+    },
     apiCastRequest(array, i, id, f) {
       axios.get(`${this.apiCast.prefix}${f}/${id}${this.apiCast.post}`, { params: this.apiCast.params })
         .then((r) => {
           r.data.cast.forEach((el) => {
             array[i].cast.push(el.original_name);
           });
-          console.log(array[i].cast);
+          // console.log(array[i].cast);
           // r.data.cast.forEach((el) => {
           // array[i].cast.push(el.original_name);
           // console.log(el);
@@ -107,8 +131,11 @@ export default {
       axios.get(`${this.queryApi.prefix}${folder}`, { params: this.queryApi.params })
         .then((r) => {
           r.data.results.forEach((el, index) => {
+            const genresNames = this.getGenres(folder, el.genre_ids);
+            console.log('genresNames', genresNames);
             // carica i dati ricevuti negli array in base alla folder
             // diverse folder hanno attributi di nome differente!!
+            // console.log(this.getGenreNameById(folder, el.genre_ids));
             if (folder === 'movie') {
               this.nf_error.movie = false;
               array.push({
@@ -121,7 +148,11 @@ export default {
                 overview: el.overview,
                 // type: folder,
                 cast: [],
+                genres: genresNames,
+                // genres: Object.assign(this.getGenreNameById(folder, el.genre_ids)),
               });
+              // console.log(array.genres);
+              // console.log(el.genre_ids);
               this.apiCastRequest(array, index, el.id, folder);
             } else if (folder === 'tv') {
               this.nf_error.tv = false;
@@ -135,7 +166,12 @@ export default {
                 overview: el.overview,
                 // type: folder,
                 cast: [],
+                // genres: el.genre_ids,
+                genres: genresNames,
               });
+              // console.log(array.genres);
+              // console.log(this.getGenreNameById);
+              // consolethis.getGenreNameById(el.genre_ids, folder),.log(el.genre_ids);
               this.apiCastRequest(array, index, el.id, folder);
             }
           });
