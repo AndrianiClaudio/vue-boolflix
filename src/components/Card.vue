@@ -8,7 +8,7 @@
     <img
     v-if="!hover"
     class="poster"
-    :src="card.poster" alt="Immagine poster non trovata"
+    :src="card.poster" :alt="card.original_title"
     >
     <!-- all'hover sulla card viene impostata a true la variabile hover -->
     <!-- mostra informazioni card -->
