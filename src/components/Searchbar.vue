@@ -99,7 +99,6 @@ export default {
         .then((r) => {
           r.data.genres.forEach((el) => {
             if (arrayGen.includes(el.id)) {
-              console.log('arrayGenIncludes: ', el.name);
               genresNames.push(el.name);
             }
           });
@@ -112,10 +111,6 @@ export default {
           r.data.cast.forEach((el) => {
             array[i].cast.push(el.original_name);
           });
-          // console.log(array[i].cast);
-          // r.data.cast.forEach((el) => {
-          // array[i].cast.push(el.original_name);
-          // console.log(el);
         });
     },
     /**
@@ -132,10 +127,8 @@ export default {
         .then((r) => {
           r.data.results.forEach((el, index) => {
             const genresNames = this.getGenres(folder, el.genre_ids);
-            console.log('genresNames', genresNames);
             // carica i dati ricevuti negli array in base alla folder
             // diverse folder hanno attributi di nome differente!!
-            // console.log(this.getGenreNameById(folder, el.genre_ids));
             if (folder === 'movie') {
               this.nf_error.movie = false;
               array.push({
@@ -146,32 +139,22 @@ export default {
                 vote: el.vote_average,
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
                 overview: el.overview,
-                // type: folder,
                 cast: [],
                 genres: genresNames,
-                // genres: Object.assign(this.getGenreNameById(folder, el.genre_ids)),
               });
-              // console.log(array.genres);
-              // console.log(el.genre_ids);
               this.apiCastRequest(array, index, el.id, folder);
             } else if (folder === 'tv') {
               this.nf_error.tv = false;
               array.push({
-                // id: el.id,
                 title: el.name,
                 original_title: el.original_name,
                 language: el.original_language,
                 vote: el.vote_average,
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
                 overview: el.overview,
-                // type: folder,
                 cast: [],
-                // genres: el.genre_ids,
                 genres: genresNames,
               });
-              // console.log(array.genres);
-              // console.log(this.getGenreNameById);
-              // consolethis.getGenreNameById(el.genre_ids, folder),.log(el.genre_ids);
               this.apiCastRequest(array, index, el.id, folder);
             }
           });
