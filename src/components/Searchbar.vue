@@ -52,6 +52,16 @@ export default {
           query: '',
         },
       },
+      apiCast: {
+        prefix: 'https://api.themoviedb.org/3/',
+        post: '/credits',
+        params: {
+          api_key: 'c22bfc860e4fafc65337bd37d36134e0',
+          language: 'it-IT',
+          // query: verrá riempita con input.value
+          // query: '',
+        },
+      },
       // poster_path contiene
       // il prefisso del link contenente le immagini poster dei film
       // la dimensione del poster dei film
@@ -72,6 +82,12 @@ export default {
     };
   },
   methods: {
+    apiCastRequest(id, f) {
+      axios.get(`${this.apiCast.prefix}${f}/${id}${this.apiCast.post}`, { params: this.apiCast.params })
+        .then((r) => {
+          console.log(r.data.cast);
+        });
+    },
     /**
      * funzione contenente una chiamata axios.
      * array sará uno degli array di this.cards
@@ -90,23 +106,31 @@ export default {
             if (folder === 'movie') {
               this.nf_error.movie = false;
               array.push({
+                // id: el.id,
                 title: el.title,
                 original_title: el.original_title,
                 language: el.original_language,
                 vote: el.vote_average,
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
                 overview: el.overview,
+                // type: folder,
+                // cast: [],
               });
+              this.apiCastRequest(el.id, folder);
             } else if (folder === 'tv') {
               this.nf_error.tv = false;
               array.push({
+                // id: el.id,
                 title: el.name,
                 original_title: el.original_name,
                 language: el.original_language,
                 vote: el.vote_average,
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
                 overview: el.overview,
+                // type: folder,
+                cast: [],
               });
+              this.apiCastRequest(el.id, folder);
             }
           });
         })

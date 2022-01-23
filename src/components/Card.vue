@@ -30,7 +30,12 @@
       <!-- ottieni immagine della bandiera, se presente, altrimenti scrive iniziale lingua -->
         <strong>Language: </strong>
         <!-- <img :src="getFlag(card.language)" :alt="card.language"> -->
-        <span class="flag">{{getFlag(card.language)}}</span>
+        <!-- <span class="flag">{{getFlag(card.language)}}</span> -->
+          <!-- :src="`https://flagcdn.com/${card.language}.svg`" -->
+        <img
+          :src="`https://flagcdn.com/${getLanguage}.svg`"
+          width="30"
+          :alt="card.language">
       </div>
       <div class='card-detail card-vote' v-if="card.vote > 0">
         <!-- stelle gialle-->
@@ -67,16 +72,14 @@ export default {
   components: {
     FontAwesomeIcon,
   },
+  computed: {
+    getLanguage() {
+      return (this.card.language === 'en') ? 'us' : this.card.language;
+    },
+  },
   data() {
     return {
       hover: false,
-      java_flags: {
-        de: '\uD83C\uDDE9\uD83C\uDDEA',
-        fr: '\uD83C\uDDEB\uD83C\uDDF7',
-        it: '\uD83C\uDDEE\uD83C\uDDF9',
-        nl: '\uD83C\uDDF3\uD83C\uDDF1',
-        en: '\uD83C\uDDFA\uD83C\uDDF8',
-      },
 
     };
   },
@@ -84,20 +87,6 @@ export default {
     card: Object,
   },
   methods: {
-    // ottieni bandiera da lingua, se presente nei data, altrimenti ottieni lingua
-    getFlag(lan) {
-      if (this.java_flags[lan]) {
-        return this.java_flags[lan];
-      }
-      return lan;
-    },
-    // getFlag(lan) {
-    //   if (this.flags[lan]) {
-    //     return this.flags[lan];
-    //   }
-    //   return '';
-    // },
-    // funzioni gestione hover
     activeHover() {
       this.hover = true;
     },
@@ -137,8 +126,12 @@ export default {
         padding-right: .5rem;
       }
       //paragrafo contenente descrzione 'overview'
-      p {
-        display: inline;
+      &.card-overview {
+        max-height: 320px;
+        overflow: auto;
+        p {
+          display: inline;
+        }
       }
       &.card-language {
         @include flex($ali:center);
