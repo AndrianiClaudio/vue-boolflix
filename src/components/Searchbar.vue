@@ -82,10 +82,16 @@ export default {
     };
   },
   methods: {
-    apiCastRequest(id, f) {
+    apiCastRequest(array, i, id, f) {
       axios.get(`${this.apiCast.prefix}${f}/${id}${this.apiCast.post}`, { params: this.apiCast.params })
         .then((r) => {
-          console.log(r.data.cast);
+          r.data.cast.forEach((el) => {
+            array[i].cast.push(el.original_name);
+          });
+          console.log(array[i].cast);
+          // r.data.cast.forEach((el) => {
+          // array[i].cast.push(el.original_name);
+          // console.log(el);
         });
     },
     /**
@@ -100,7 +106,7 @@ export default {
       this.queryApi.params.query = this.input.value.trim().split(' ').join('+');
       axios.get(`${this.queryApi.prefix}${folder}`, { params: this.queryApi.params })
         .then((r) => {
-          r.data.results.forEach((el) => {
+          r.data.results.forEach((el, index) => {
             // carica i dati ricevuti negli array in base alla folder
             // diverse folder hanno attributi di nome differente!!
             if (folder === 'movie') {
@@ -114,9 +120,9 @@ export default {
                 poster: (el.poster_path !== null) ? (this.poster_path.prefix + this.poster_path.dim + el.poster_path) : '',
                 overview: el.overview,
                 // type: folder,
-                // cast: [],
+                cast: [],
               });
-              this.apiCastRequest(el.id, folder);
+              this.apiCastRequest(array, index, el.id, folder);
             } else if (folder === 'tv') {
               this.nf_error.tv = false;
               array.push({
@@ -130,7 +136,7 @@ export default {
                 // type: folder,
                 cast: [],
               });
-              this.apiCastRequest(el.id, folder);
+              this.apiCastRequest(array, index, el.id, folder);
             }
           });
         })

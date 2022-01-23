@@ -56,6 +56,10 @@
           />
           <span>({{card.vote/2}})</span>
       </div>
+      <div v-if= "card.cast.length > 0" class="card-detail card-cast">
+        <strong>Cast: </strong>
+        {{getCast()}}
+      </div>
     </div>
   </div>
 </template>
@@ -87,6 +91,20 @@ export default {
     card: Object,
   },
   methods: {
+    getCast() {
+      let castString = '';
+      let i = 0;
+      const maxNumCast = 5;
+      while (i < maxNumCast && this.card.cast[i]) {
+        castString += this.card.cast[i];
+        if (i < maxNumCast - 1 && i < this.card.cast.length - 1) {
+          castString += ' - ';
+        }
+        i += 1;
+      }
+
+      return castString;
+    },
     activeHover() {
       this.hover = true;
     },
